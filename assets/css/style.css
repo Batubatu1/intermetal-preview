@@ -647,6 +647,7 @@ body.menu-open .menu-overlay .menu-contact a{transition-delay:.3s}
 .dienst-media .frame-core{aspect-ratio:4/3.1;border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
 .dienst-media.duo{grid-template-columns:1fr 1fr}
 .dienst-media.duo .frame-core:first-child{grid-column:1 / -1;aspect-ratio:16/8.5}
+.dienst-media.duo.pair .frame-core,.dienst-media.duo.pair .frame-core:first-child{grid-column:auto;aspect-ratio:3/4}
 .spec-chips{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
 .spec-chip{
   border:1px solid var(--line);border-radius:8px;background:var(--card);
