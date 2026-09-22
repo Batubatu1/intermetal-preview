@@ -67,3 +67,55 @@
     });
   }
 })();
+
+/* Video's: altijd automatisch afspelen, ook op telefoons.
+   Energiebesparing/databesparing blokkeert soms `autoplay`; dan starten we
+   zelf zodra een video in beeld komt, en bij de eerste aanraking/scroll. */
+(function () {
+  "use strict";
+  var vids = Array.prototype.slice.call(document.querySelectorAll("video[autoplay]"));
+  if (!vids.length) return;
+
+  vids.forEach(function (v) {
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+    v.setAttribute("muted", "");
+    v.setAttribute("playsinline", "");
+    v.setAttribute("webkit-playsinline", "");
+    v.removeAttribute("controls");
+  });
+
+  function tryPlay(v) {
+    if (!v.paused) return;
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+
+  var visible = new Set();
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { visible.add(e.target); tryPlay(e.target); }
+        else { visible.delete(e.target); }
+      });
+    }, { threshold: 0.1 });
+    vids.forEach(function (v) { io.observe(v); });
+  } else {
+    vids.forEach(tryPlay);
+  }
+
+  // Eerste gebruikersactie ontgrendelt afspelen op iOS in energiebesparingsmodus.
+  function kick() { vids.forEach(tryPlay); }
+  ["touchstart", "touchend", "click", "scroll", "keydown"].forEach(function (ev) {
+    window.addEventListener(ev, kick, { passive: true });
+  });
+
+  // Na terugkeren naar het tabblad opnieuw starten.
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) visible.forEach(tryPlay);
+  });
+  vids.forEach(function (v) {
+    v.addEventListener("loadeddata", function () { if (visible.has(v)) tryPlay(v); });
+  });
+})();

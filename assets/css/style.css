@@ -700,3 +700,10 @@ body.menu-open .menu-overlay .menu-contact a{transition-delay:.3s}
 }
 .article .article-cta h3{color:#fff;font-size:1.1rem}
 .article .article-cta p{color:var(--mut);font-size:.88rem;margin:5px 0 0}
+
+/* geen afspeelknop/bediening over de achtergrondvideo's (iOS/Android) */
+video::-webkit-media-controls,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-start-playback-button{display:none !important;-webkit-appearance:none;opacity:0}
+video{pointer-events:none}
