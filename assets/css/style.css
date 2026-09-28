@@ -252,11 +252,10 @@ body.menu-open .menu-overlay .menu-contact a{transition-delay:.3s}
 .hero-bg video{width:100%;height:100%;object-fit:cover}
 .hero-bg::after{
   content:"";position:absolute;inset:0;
-  /* lichter dan voorheen (feedback 28-09: hero te donker); tekst blijft leesbaar links */
   background:
-    linear-gradient(90deg,rgba(6,7,9,.84) 0%,rgba(6,7,9,.66) 34%,rgba(6,7,9,.28) 58%,rgba(6,7,9,.04) 86%,rgba(6,7,9,0) 100%),
-    linear-gradient(0deg,var(--bg) 0%,rgba(10,11,13,0) 22%),
-    linear-gradient(180deg,rgba(6,7,9,.45) 0%,rgba(10,11,13,0) 18%);
+    linear-gradient(90deg,rgba(6,7,9,.9) 0%,rgba(6,7,9,.62) 45%,rgba(6,7,9,.3) 100%),
+    linear-gradient(0deg,var(--bg) 0%,rgba(10,11,13,0) 30%),
+    linear-gradient(180deg,rgba(6,7,9,.5) 0%,rgba(10,11,13,0) 24%);
 }
 .hero .container{position:relative;z-index:2;flex:1;display:flex;align-items:flex-end}
 .hero-copy{max-width:780px;min-width:0;padding:150px 0 72px}
@@ -712,19 +711,26 @@ video{pointer-events:none}
 
 
 /* ==========================================================================
-   RUSTIGE LANDING (28-09-2026) — minder beeld/tekst, mobiel eerst
+   HERSTEL (28-09-2026): oude site, met de nieuwe hero, de diensten-wipe
+   en de werkplaatsfoto in de footer. html.sc-on = scroll-effecten actief.
    ========================================================================== */
+
+/* hero: lasvideo iets donkerder, klanttekst, geen bewerkingenbalk */
 .hero-sub{max-width:600px}
 .hero-sub b{color:#fff;font-weight:600}
 .hero h1,.hero-sub{text-shadow:0 1px 18px rgba(0,0,0,.55)}
-.hero-copy .kicker{
-  background:rgba(8,9,11,.62);border:1px solid rgba(214,52,43,.35);border-radius:6px;
-  padding:6px 10px 6px 11px;color:#FF6A5E;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+.hero-bg video{object-position:50% 50%;will-change:transform;transform-origin:50% 60%}
+.hero .container{will-change:transform}
+.hero-bg::after{
+  background:
+    linear-gradient(90deg,rgba(6,7,9,.86) 0%,rgba(6,7,9,.6) 40%,rgba(6,7,9,.32) 72%,rgba(6,7,9,.22) 100%),
+    linear-gradient(0deg,var(--bg) 0%,rgba(10,11,13,0) 26%),
+    linear-gradient(180deg,rgba(6,7,9,.5) 0%,rgba(10,11,13,0) 22%);
 }
 @media (max-width:920px){
   .hero-bg video{object-position:72% 50%}
   .hero-bg::after{
-    background:linear-gradient(180deg,rgba(6,7,9,.5) 0%,rgba(6,7,9,.1) 17%,rgba(6,7,9,.42) 32%,rgba(6,7,9,.82) 52%,rgba(6,7,9,.9) 80%,var(--bg) 100%);
+    background:linear-gradient(180deg,rgba(6,7,9,.6) 0%,rgba(6,7,9,.28) 18%,rgba(6,7,9,.52) 34%,rgba(6,7,9,.86) 54%,rgba(6,7,9,.93) 80%,var(--bg) 100%);
   }
 }
 @media (max-width:720px){
@@ -736,7 +742,7 @@ video{pointer-events:none}
   .hero-facts{display:none}
 }
 
-/* diensten: vier rustige kaarten */
+/* diensten: vier kaarten, elk opent met een korte wipe */
 .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .svc{
   display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;
@@ -748,7 +754,6 @@ video{pointer-events:none}
 .svc-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
 .svc:hover .svc-img img{transform:scale(1.05)}
 .svc-body{position:relative;flex:1;display:flex;flex-direction:column;gap:6px;padding:18px 20px 20px}
-.svc-idx{font-family:"Space Mono",monospace;font-size:.62rem;letter-spacing:.2em;color:var(--red)}
 .svc h3{font-size:1.08rem;color:#fff;padding-right:38px}
 .svc p{font-size:.84rem;color:var(--mut);line-height:1.5}
 .svc-go{
@@ -766,78 +771,23 @@ video{pointer-events:none}
   .svc p{font-size:.76rem;line-height:1.4}
   .svc-go{display:none}
 }
+.svc-grid[data-stagger]>*{opacity:1;animation:none}
+.sc-on .svc-grid[data-stagger]:not(.in)>*{clip-path:inset(0 0 100% 0)}
+.sc-on .svc-grid[data-stagger].in>*{animation:svcWipe .9s var(--ease) both}
+.sc-on .svc-grid[data-stagger].in>*:nth-child(2){animation-delay:.08s}
+.sc-on .svc-grid[data-stagger].in>*:nth-child(3){animation-delay:.16s}
+.sc-on .svc-grid[data-stagger].in>*:nth-child(4){animation-delay:.24s}
+@keyframes svcWipe{from{clip-path:inset(0 0 100% 0);transform:translateY(16px)}to{clip-path:inset(0 0 0 0);transform:none}}
 
-/* bewerkingen: lijst + één video */
-.ops2{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(32px,6vw,80px);align-items:center}
-.ops2 .sec-head{margin-bottom:26px}
-.ops2-list{display:grid;grid-template-columns:1fr 1fr;column-gap:28px;max-width:520px}
-.ops2-list li{
-  display:flex;align-items:baseline;gap:12px;padding:12px 0;
-  border-top:1px solid var(--line);font-weight:600;font-size:.98rem;color:var(--txt);
-}
-.ops2-list li span{font-family:"Space Mono",monospace;font-size:.6rem;color:var(--red);letter-spacing:.12em}
-.ops2-media{
-  position:relative;margin:0;border-radius:var(--r);overflow:hidden;
-  border:1px solid var(--line);box-shadow:var(--shadow);aspect-ratio:4/5;max-height:620px;background:#0E1013;
-}
-.ops2-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.ops2-media .tag{
-  position:absolute;left:12px;bottom:12px;z-index:2;
-  background:rgba(8,9,11,.72);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 12px;
-  font-family:"Space Mono",monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#D6DEE8;
-  display:flex;align-items:center;gap:8px;
-}
-.ops2-media .tag::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--red)}
-@media (max-width:880px){
-  .ops2{grid-template-columns:1fr;gap:30px}
-  .ops2-media{aspect-ratio:1/1;max-height:none}
+/* over ons: de werkplaatsfoto staat nu in de footer; tekst over de volle breedte */
+.about-grid.solo{grid-template-columns:1fr}
+.about-grid.solo .sec-head{max-width:760px}
+@media (min-width:881px){
+  .about-grid.solo .about-points{display:grid;grid-template-columns:repeat(3,1fr);column-gap:clamp(24px,3.4vw,48px)}
+  .about-grid.solo .about-point:last-child{border-bottom:0}
 }
 
-/* over ons: tekst + drie punten naast elkaar + compacte CBAM-regel */
-.about2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);align-items:end}
-.about2 h2{margin-top:14px;font-size:clamp(1.7rem,3.4vw,2.5rem);color:#fff}
-.about2-lead{color:var(--mut);font-size:1rem;line-height:1.7}
-.about2-points{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,40px);margin-top:clamp(36px,5vw,56px)}
-.ap{border-top:1px solid rgba(255,255,255,.14);padding-top:20px}
-.ap .n{font-family:"Space Mono",monospace;font-size:.62rem;color:var(--red);letter-spacing:.14em}
-.ap b{display:block;margin-top:10px;font-family:"Archivo",sans-serif;font-size:1.12rem;font-weight:700;color:#fff;line-height:1.25}
-.ap .t{display:block;margin-top:6px;color:var(--mut);font-size:.9rem;line-height:1.6}
-.cbam2{
-  margin-top:clamp(36px,5vw,56px);display:flex;align-items:center;gap:16px 18px;flex-wrap:wrap;
-  padding:16px 18px;border:1px solid rgba(214,52,43,.4);border-radius:var(--r);background:rgba(214,52,43,.07);
-}
-.cbam2-ic{width:42px;height:42px;flex:none;border-radius:11px;background:rgba(214,52,43,.16);display:flex;align-items:center;justify-content:center}
-.cbam2-ic svg{width:20px;height:20px;stroke:#FF6A5E;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.cbam2-txt{flex:1;min-width:180px}
-.cbam2-txt b{display:block;font-family:"Archivo",sans-serif;font-size:1.02rem;color:#fff}
-.cbam2-txt .s{display:block;margin-top:2px;color:var(--mut);font-size:.86rem}
-@media (max-width:880px){
-  .about2{grid-template-columns:1fr;align-items:start;gap:16px}
-  .about2-points{grid-template-columns:1fr;gap:0}
-  .ap{padding:16px 0}
-  .ap b{margin-top:6px}
-}
-@media (max-width:560px){
-  .cbam2 .chip{width:100%;justify-content:center}
-}
-
-/* nieuws op de landing: compact, zonder samenvatting */
-.news-grid.compact .news-card p{display:none}
-.news-grid.compact .news-card h3{flex:1}
-@media (max-width:880px){
-  .news-grid.compact{gap:12px}
-  .news-grid.compact .news-card .core{
-    display:grid;grid-template-columns:96px 1fr;grid-template-rows:auto auto 1fr;
-    column-gap:14px;padding:12px;align-items:start;
-  }
-  .news-grid.compact .news-cover{grid-row:1 / span 3;margin:0;aspect-ratio:1/1;border-radius:9px;border:0}
-  .news-grid.compact .news-tag{grid-column:2;justify-self:start;margin-bottom:6px}
-  .news-grid.compact .news-date{grid-column:2}
-  .news-grid.compact .news-card h3{grid-column:2;margin-top:5px;font-size:.95rem;line-height:1.3}
-  .news-grid.compact .card-link{display:none}
-}
-
-/* footer: werkplaatsfoto in plaats van dubbele bewerkingenlijst */
+/* footer: werkplaatsfoto in plaats van de bewerkingenlijst */
 .footer-grid.has-photo{grid-template-columns:1.2fr 1fr 1fr 1.25fr}
 .footer-photo{
   margin:0;position:relative;border-radius:var(--r);overflow:hidden;
@@ -855,383 +805,6 @@ video{pointer-events:none}
   .footer-grid.has-photo > div:nth-child(2) li{break-inside:avoid}
 }
 
-/* mobiel: iets compactere secties */
-@media (max-width:560px){
-  .sec{padding:60px 0}
-  .sec-head{margin-bottom:28px}
-  .band{min-height:0}
-  .band .container{padding-top:72px;padding-bottom:72px}
-}
-
-/* dienstenoverzicht: rustiger (lange uitleg staat op de detailpagina's) */
-.dienst .body{display:none}
-.dienst-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
-.dienst .dienst-actions .btn{margin:0}
-@media (max-width:560px){
-  .dienst-actions .btn-primary{flex:1 1 100%;justify-content:center;padding:14px 20px}
-  .dienst-actions .btn-ghost{flex:1 1 auto;justify-content:center;padding:11px 14px;font-size:.84rem}
-}
-
-/* ==========================================================================
-   SCROLL-CRAFT (28-09-2026): zeven acts, elk een eigen beweging, één piek.
-   html.sc-on = scroll-effecten actief; zonder JS of bij reduced motion
-   valt alles terug op een statische, volledige compositie.
-   ========================================================================== */
-
-/* act 1 — hero: diepte uit drie lagen (video, beeldmerk, tekst) */
-.hero-bg video{will-change:transform;transform-origin:50% 60%}
-.hero .container{will-change:transform}
-.hero-mark{
-  position:absolute;z-index:1;pointer-events:none;
-  right:-9vw;top:9vh;width:min(70vh,760px);aspect-ratio:1;
-  background:rgba(255,255,255,.06);
-  -webkit-mask:url(../img/emblem-mark.svg) center/contain no-repeat;mask:url(../img/emblem-mark.svg) center/contain no-repeat;
-  will-change:transform;
-}
-@media (max-width:920px){.hero-mark{display:none}}
-
-/* act 2 — diensten: elke kaart opent met een korte wipe */
-.svc-grid[data-stagger]>*{opacity:1;animation:none}
-.sc-on .svc-grid[data-stagger]:not(.in)>*{clip-path:inset(0 0 100% 0)}
-.sc-on .svc-grid[data-stagger].in>*{animation:svcWipe .9s var(--ease) both}
-.sc-on .svc-grid[data-stagger].in>*:nth-child(2){animation-delay:.08s}
-.sc-on .svc-grid[data-stagger].in>*:nth-child(3){animation-delay:.16s}
-.sc-on .svc-grid[data-stagger].in>*:nth-child(4){animation-delay:.24s}
-@keyframes svcWipe{from{clip-path:inset(0 0 100% 0);transform:translateY(16px)}to{clip-path:inset(0 0 0 0);transform:none}}
-.svc h3{padding-right:38px}
-
-/* act 3 — bewerkingen: video links staat stil, de lijst licht één voor één op */
-.ops2.flip{grid-template-columns:.9fr 1.1fr}
-.ops2.flip > .ops2-media{order:-1}
-.ops2-list li::before{content:"";width:7px;height:7px;background:var(--red);flex:none;transform:translateY(-1px)}
-.ops2-list li{align-items:center;transition:color .35s var(--ease)}
-@media (min-width:1024px){
-  .sc-on .ops-pin > .container{min-height:150vh}
-  .sc-on .ops-pin .ops2{position:sticky;top:clamp(96px,14vh,150px)}
-  .sc-on .ops-pin .ops2-list li{color:#58626E}
-  .sc-on .ops-pin .ops2-list li::before{background:#3A424C;transition:background .35s}
-  .sc-on .ops-pin .ops2-list li.on{color:#fff}
-  .sc-on .ops-pin .ops2-list li.on::before{background:var(--red)}
-}
-@media (max-width:880px){.ops2.flip{grid-template-columns:1fr}.ops2.flip > .ops2-media{order:0}}
-
-/* act 4 — over ons: één gecentreerde uitspraak, regel voor regel */
-.about2.center{grid-template-columns:1fr;justify-items:center;text-align:center;gap:18px}
-.about2.center h2{font-size:clamp(2rem,4.6vw,3.4rem);margin-top:0}
-.about2.center .about2-lead{max-width:640px}
-.about2 .ln{display:block;overflow:hidden;padding-bottom:.06em}
-.about2 .ln>span{display:inline-block}
-.sc-on .about2.rv .ln>span{transform:translateY(105%)}
-.sc-on .about2.rv.in .ln>span{animation:lnUp .9s var(--ease) both}
-.sc-on .about2.rv.in .ln:nth-child(2)>span{animation-delay:.14s}
-@keyframes lnUp{to{transform:translateY(0)}}
-.ap{text-align:left}
-.ap b{margin-top:0}
-
-/* act 5 — PIEK: van tekening tot levering (signature: tekening wordt product) */
-.forge{position:relative;background:var(--bg)}
-.forge::before{
-  content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
-  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-  background-size:64px 64px;
-  -webkit-mask:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);
-}
-.forge-pin{position:relative;padding:clamp(80px,10vw,130px) 0}
-.forge-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,90px);align-items:center;width:100%}
-.forge h2{font-size:clamp(2rem,4.4vw,3.4rem);color:#fff;max-width:560px}
-.forge-copy p{margin-top:16px;color:#C2CBD5;max-width:440px;font-size:1.02rem}
-.forge-steps{position:relative;margin-top:32px;padding-top:16px;max-width:440px}
-.forge-steps::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:rgba(255,255,255,.12)}
-.forge-bar{position:absolute;left:0;top:0;height:2px;width:100%;background:var(--red);transform-origin:0 50%;transform:scaleX(1)}
-.forge-steps ol{list-style:none;display:flex;justify-content:space-between;gap:12px}
-.forge-steps li{font-family:"Space Mono",monospace;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#fff;transition:color .35s var(--ease)}
-.forge .btn{margin-top:30px}
-.forge-stage{
-  position:relative;width:100%;max-width:470px;justify-self:center;aspect-ratio:3/4;
-  border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#0C0E11;box-shadow:var(--shadow);
-}
-.forge-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:clip-path,transform}
-.forge-draw{position:absolute;left:7%;top:6%;width:86%;height:88%;opacity:.35}
-.forge-draw .fd{fill:none;stroke:#9AA6B4;stroke-width:1.7;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:round}
-.forge-draw .fd.acc{stroke:#FF5A4E;stroke-width:2}
-.forge-tag{
-  position:absolute;left:14px;bottom:14px;z-index:2;display:flex;align-items:center;gap:9px;
-  background:rgba(8,9,11,.82);border:1px solid rgba(255,255,255,.16);border-radius:8px;padding:8px 12px;
-  font-family:"Space Mono",monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:#E6EBF0;
-  transition:opacity .45s var(--ease),transform .45s var(--ease);
-}
-.forge-tag::before{content:"";width:7px;height:7px;background:var(--red)}
-/* met scroll-effecten: de act wordt vastgezet en door de scroll gescrubd */
-.sc-on .forge{height:260vh}
-.sc-on .forge-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding:70px 0 0}
-.sc-on .forge-steps li{color:#5C6672}
-.sc-on .forge-steps li.on{color:#fff}
-.sc-on .forge-bar{transform:scaleX(0)}
-.sc-on .forge-photo{clip-path:inset(100% 0 0 0)}
-.sc-on .forge-draw{opacity:1}
-.sc-on .forge-draw .fd{stroke-dashoffset:1}
-.sc-on .forge-tag{opacity:0;transform:translateY(10px)}
-.sc-on .forge.done .forge-tag{opacity:1;transform:none}
-@media (max-width:880px){
-  .forge-grid{grid-template-columns:1fr;gap:22px}
-  .forge h2{font-size:clamp(1.8rem,8vw,2.3rem)}
-  .forge-copy p{font-size:.95rem;margin-top:10px}
-  .forge-steps{margin-top:20px}
-  .forge .btn{margin-top:20px;width:100%;justify-content:center}
-  .forge-stage{max-width:none;aspect-ratio:4/3.3}
-  .sc-on .forge{height:220vh}
-  .sc-on .forge-pin{padding:64px 0 0;align-items:flex-start}
-  .sc-on .forge-pin .container{padding-top:18px}
-  .sc-on .forge-stage{max-height:40svh;aspect-ratio:auto;height:40svh}
-}
-
-/* act 6 — nieuws: op mobiel een zijwaarts veegbare rij */
-@media (max-width:880px){
-  .news-grid.compact{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;
-    margin:0 calc(-1 * clamp(20px,4vw,40px));padding:0 clamp(20px,4vw,40px) 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  .news-grid.compact::-webkit-scrollbar{display:none}
-  .news-grid.compact > .news-card{flex:0 0 80%;scroll-snap-align:start}
-  .news-grid.compact .news-card .core{display:flex;flex-direction:column;padding:0 16px 18px}
-  .news-grid.compact .news-cover{margin:0 -16px 14px;aspect-ratio:16/9;border-radius:0;border-bottom:1px solid var(--line)}
-  .news-grid.compact .news-tag{margin-bottom:8px}
-  .news-grid.compact .news-card h3{margin-top:8px;font-size:1rem}
-}
-
-/* act 7 — contact: staat stil. Geen beweging, direct bruikbaar. */
-
-/* ==========================================================================
-   SCROLL-CRAFT v2 (28-09-2026, feedback eigenaar op v1)
-   ========================================================================== */
-
-/* hero: drieluik van eigen beelden; donkerder scrim links waar de tekst staat */
-.hero-bg video{object-position:50% 50%}
-.hero-bg::after{
-  background:
-    linear-gradient(90deg,rgba(6,7,9,.9) 0%,rgba(6,7,9,.74) 30%,rgba(6,7,9,.34) 56%,rgba(6,7,9,.14) 100%),
-    linear-gradient(0deg,var(--bg) 0%,rgba(10,11,13,0) 24%),
-    linear-gradient(180deg,rgba(6,7,9,.5) 0%,rgba(10,11,13,0) 20%);
-}
-.hero-tri{position:absolute;inset:0;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);pointer-events:none}
-.hero-tri i{display:block;background:var(--bg);transform-origin:50% 0;animation:triOut 1.15s cubic-bezier(.7,0,.2,1) both}
-.hero-tri i:nth-child(1){animation-delay:.12s}
-.hero-tri i:nth-child(2){animation-delay:.28s;transform-origin:50% 100%}
-.hero-tri i:nth-child(3){animation-delay:.44s}
-@keyframes triOut{to{transform:scaleY(0)}}
-@media (max-width:920px){
-  .hero-bg video{object-position:50% 50%}
-  .hero-bg::after{
-    background:linear-gradient(180deg,rgba(6,7,9,.55) 0%,rgba(6,7,9,.15) 18%,rgba(6,7,9,.45) 34%,rgba(6,7,9,.86) 54%,rgba(6,7,9,.93) 80%,var(--bg) 100%);
-  }
-}
-@media (max-width:720px){.hero-tri{grid-template-columns:1fr}.hero-tri i:nth-child(n+2){display:none}}
-@media (prefers-reduced-motion:reduce){.hero-tri{display:none}}
-
-/* bewerkingen: rustig, zonder scroll-animatie */
-.ops2-list li{color:var(--txt)}
-
-/* eigen productie: de twee zinnen schuiven als deuren open, de film verschijnt ertussen */
-.ep-sec{padding-top:clamp(40px,6vw,80px)}
-.ep{position:relative}
-.ep-grid{display:grid;grid-template-columns:1fr minmax(260px,31vw) 1fr;gap:clamp(18px,3vw,44px);height:min(82vh,760px)}
-.ep-title{display:contents}
-.ep-l,.ep-r{
-  display:block;font-family:"Archivo",sans-serif;font-weight:700;letter-spacing:-.025em;line-height:1.02;
-  font-size:clamp(2.2rem,4.3vw,4rem);will-change:transform;text-wrap:balance;
-}
-.ep-l{grid-column:1;grid-row:1;align-self:start;text-align:right;padding-top:9%;color:#fff}
-.ep-r{grid-column:3;grid-row:1;align-self:end;text-align:left;padding-bottom:9%;color:var(--red)}
-.ep-media{grid-column:2;grid-row:1;position:relative;margin:0;border-radius:var(--r);overflow:hidden;background:#0E1013;box-shadow:0 40px 90px -40px rgba(0,0,0,.9)}
-.ep-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;will-change:transform}
-.ep-media .tag{
-  position:absolute;left:12px;bottom:12px;z-index:2;display:flex;align-items:center;gap:8px;
-  background:rgba(8,9,11,.72);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 12px;
-  font-family:"Space Mono",monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#D6DEE8;
-  transition:opacity .45s var(--ease);
-}
-.ep-media .tag::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--red)}
-.ep + .about2{margin-top:clamp(40px,6vw,72px)}
-.sc-on .ep{height:230vh}
-.sc-on .ep-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding-top:40px}
-.sc-on .ep-pin .ep-grid{width:100%}
-.sc-on .ep-media{clip-path:inset(0 49.6% 0 49.6% round 14px)}
-.sc-on .ep-media .tag{opacity:0}
-.sc-on .ep.open .ep-media .tag{opacity:1}
-@media (max-width:880px){
-  .ep-grid{grid-template-columns:1fr;grid-template-rows:auto auto auto;height:auto;gap:14px}
-  .ep-l{grid-row:1;grid-column:1;text-align:left;padding:0;font-size:clamp(2rem,9vw,2.6rem)}
-  .ep-media{grid-row:2;grid-column:1;width:100%;height:56svh;min-height:360px}
-  .ep-r{grid-row:3;grid-column:1;text-align:right;padding:0;font-size:clamp(2rem,9vw,2.6rem)}
-  .sc-on .ep{height:200vh}
-  .sc-on .ep-pin{align-items:flex-start;padding-top:78px}
-}
-
-/* van tekening tot levering v2: CAD van de echte plaat -> laser -> metaal -> levering */
-.forge2{position:relative;background:var(--bg)}
-.f2-pin{position:relative;overflow:hidden;padding:clamp(80px,10vw,130px) 0}
-.f2-pin::before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:linear-gradient(rgba(140,170,200,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(140,170,200,.05) 1px,transparent 1px);
-  background-size:48px 48px;
-  -webkit-mask:radial-gradient(ellipse 75% 70% at 62% 50%,#000 40%,transparent 100%);mask:radial-gradient(ellipse 75% 70% at 62% 50%,#000 40%,transparent 100%);
-}
-.f2-bg{position:absolute;inset:0;opacity:0;pointer-events:none}
-.f2-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 35%;filter:saturate(.85) brightness(.62);transform:scale(1.08);will-change:transform}
-.f2-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,13,.95) 0%,rgba(10,11,13,.78) 38%,rgba(10,11,13,.4) 100%)}
-.f2-grid{position:relative;z-index:1;display:grid;grid-template-columns:.78fr 1.22fr;gap:clamp(28px,5vw,72px);align-items:center;width:100%}
-.f2-copy h2{font-size:clamp(2rem,4vw,3.2rem);color:#fff;max-width:520px}
-.f2-phases{list-style:none;margin-top:30px;display:grid;gap:16px;max-width:430px}
-.f2-ph{position:relative;padding-left:20px;transition:opacity .45s var(--ease)}
-.f2-ph::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;background:var(--red);transition:background .45s}
-.f2-ph b{display:block;font-family:"Archivo",sans-serif;font-size:1.2rem;font-weight:700;color:#fff}
-.f2-ph span{display:block;margin-top:2px;color:#AAB3BE;font-size:.95rem;line-height:1.5}
-.f2-progress{margin-top:24px;height:2px;max-width:430px;background:rgba(255,255,255,.12)}
-.f2-progress span{display:block;height:100%;background:var(--red);transform-origin:0 50%}
-.f2-note{margin-top:18px;color:var(--mut);font-size:.9rem}
-.forge2 .btn{margin-top:14px}
-.f2-stage{position:relative;width:100%;aspect-ratio:1475/712;will-change:transform;transform-origin:50% 60%}
-.f2-plate{position:absolute;overflow:hidden;border-radius:4px;box-shadow:0 34px 70px -34px rgba(0,0,0,.95)}
-.f2-metal{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;will-change:clip-path}
-.f2-cad{position:absolute;inset:0;width:100%;height:100%;overflow:visible;opacity:.32}
-.f2-cad .fd{fill:none;stroke:#C3D0DD;stroke-width:2.4;stroke-dasharray:1;stroke-dashoffset:0;stroke-linecap:round;stroke-linejoin:round}
-.f2-cad .fd.acc{stroke:#FF5A4E;stroke-width:2.6}
-.f2-cad .cl{stroke:#8494A5;stroke-width:1.6;stroke-dasharray:22 7 4 7}
-.f2-cad .cad-lbl{font:700 24px "Space Mono",monospace;fill:#FF8A80;letter-spacing:.14em}
-.f2-laser{position:absolute;top:-7%;bottom:-7%;left:0;width:3px;margin-left:-1px;background:#fff;opacity:0;
-  box-shadow:0 0 10px 2px #ff6a4e,0 0 36px 10px rgba(255,90,78,.55),0 0 90px 24px rgba(255,90,78,.18);}
-.f2-laser i{position:absolute;left:1px;width:3px;height:3px;border-radius:50%;background:#FFE0C2;box-shadow:0 0 6px 2px #ff7a3a;animation:sparkA .55s linear infinite}
-.f2-laser i:nth-child(1){top:18%}
-.f2-laser i:nth-child(2){top:34%;animation-name:sparkB;animation-delay:.12s}
-.f2-laser i:nth-child(3){top:49%;animation-delay:.24s}
-.f2-laser i:nth-child(4){top:61%;animation-name:sparkB;animation-delay:.07s}
-.f2-laser i:nth-child(5){top:74%;animation-delay:.33s}
-.f2-laser i:nth-child(6){top:86%;animation-name:sparkB;animation-delay:.19s}
-@keyframes sparkA{from{transform:translate(0,0);opacity:1}to{transform:translate(30px,-22px);opacity:0}}
-@keyframes sparkB{from{transform:translate(0,0);opacity:1}to{transform:translate(26px,20px);opacity:0}}
-.sc-on .forge2{height:320vh}
-.sc-on .f2-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding:74px 0 0}
-.sc-on .f2-cad{opacity:1}
-.sc-on .f2-cad .fd{stroke-dashoffset:1}
-.sc-on .f2-cad .cl,.sc-on .f2-cad .cad-lbl{opacity:0}
-.sc-on .f2-metal{clip-path:inset(0 100% 0 0)}
-.sc-on .f2-ph{opacity:.34}
-.sc-on .f2-ph::before{background:#4A535E}
-.sc-on .f2-ph.on{opacity:1}
-.sc-on .f2-ph.on::before{background:var(--red)}
-.sc-on .f2-progress span{transform:scaleX(0)}
-@media (max-width:880px){
-  .f2-grid{grid-template-columns:1fr;gap:18px}
-  .f2-stage{order:-1}
-  .f2-copy h2{font-size:clamp(1.8rem,8vw,2.3rem)}
-  .f2-phases{margin-top:14px;gap:9px}
-  .f2-ph b{font-size:1.02rem}
-  .f2-ph span{font-size:.86rem}
-  .f2-note{margin-top:12px;font-size:.84rem}
-  .forge2 .btn{width:100%;justify-content:center}
-  .f2-cad .cad-lbl{display:none}
-  .sc-on .forge2{height:290vh}
-  .sc-on .f2-pin{align-items:flex-start;padding-top:86px}
-}
-.about.ep-sec{overflow:visible}   /* sticky werkt niet binnen overflow:hidden */
-/* de laserlijn die het beeld opensnijdt */
-.ep-slit{grid-column:2;grid-row:1;justify-self:center;align-self:stretch;width:3px;z-index:2;pointer-events:none;opacity:0;
-  background:linear-gradient(180deg,transparent,#fff 8%,#fff 92%,transparent);
-  box-shadow:0 0 12px 3px #ff5a4e,0 0 44px 12px rgba(255,90,78,.5),0 0 110px 30px rgba(255,90,78,.18);}
-.sc-on .ep-slit{opacity:1}
-@media (max-width:880px){.ep-slit{grid-row:2;grid-column:1}}
-
-/* ==========================================================================
-   SCROLL-CRAFT v3 (28-09-2026, feedback eigenaar op v2)
-   ========================================================================== */
-
-/* hero: de oude lasvideo terug, donkerder dan v1 maar lichter dan het origineel */
-.hero-bg video{object-position:50% 50%}
-.hero-bg::after{
-  background:
-    linear-gradient(90deg,rgba(6,7,9,.86) 0%,rgba(6,7,9,.6) 40%,rgba(6,7,9,.32) 72%,rgba(6,7,9,.22) 100%),
-    linear-gradient(0deg,var(--bg) 0%,rgba(10,11,13,0) 26%),
-    linear-gradient(180deg,rgba(6,7,9,.5) 0%,rgba(10,11,13,0) 22%);
-}
-@media (max-width:920px){
-  .hero-bg video{object-position:72% 50%}
-  .hero-bg::after{
-    background:linear-gradient(180deg,rgba(6,7,9,.6) 0%,rgba(6,7,9,.28) 18%,rgba(6,7,9,.52) 34%,rgba(6,7,9,.86) 54%,rgba(6,7,9,.93) 80%,var(--bg) 100%);
-  }
-}
-
-/* bewerkingen: montage is 4:5, ook op mobiel */
-@media (max-width:880px){.ops2-media{aspect-ratio:4/5}}
-
-/* eigen productie: titel, film achter stalen schuifdeuren, lead en punten in één scherm */
-.ep-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
-.ep-h{font-size:clamp(1.9rem,3.6vw,3rem);color:#fff;letter-spacing:-.02em;line-height:1.08;max-width:1000px}
-.ep-h .ep-b{color:var(--red)}
-.ep-frame{
-  position:relative;margin:clamp(16px,2.6vh,28px) 0 0;aspect-ratio:16/9;
-  width:min(760px,64vw,calc((100svh - 430px) * 1.7778));min-width:min(100%,420px);
-  border-radius:var(--r);overflow:hidden;background:#0E1013;
-  box-shadow:0 40px 90px -40px rgba(0,0,0,.9),0 0 0 1px var(--line);
-}
-.ep-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;will-change:transform}
-.ep-door{
-  position:absolute;top:0;bottom:0;width:50%;z-index:2;overflow:hidden;will-change:transform;
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 38%,rgba(0,0,0,.28)),
-    repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,rgba(0,0,0,0) 1px 3px),
-    linear-gradient(90deg,#171A1F,#2A3037 62%,#22272D);
-}
-.ep-door-l{left:0;box-shadow:inset -1px 0 0 rgba(255,255,255,.16)}
-.ep-door-r{right:0;box-shadow:inset 1px 0 0 rgba(0,0,0,.55);
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,0) 38%,rgba(0,0,0,.28)),
-    repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,rgba(0,0,0,0) 1px 3px),
-    linear-gradient(270deg,#171A1F,#2A3037 62%,#22272D);}
-.ep-em{position:absolute;top:50%;height:46%;aspect-ratio:1;display:block}
-.ep-em img{display:block;width:100%;height:100%;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
-.ep-door-l .ep-em{right:0;transform:translate(50%,-50%)}
-.ep-door-r .ep-em{left:0;transform:translate(-50%,-50%)}
-.ep-seam{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;z-index:3;opacity:0;pointer-events:none;
-  background:linear-gradient(180deg,transparent,#fff 10%,#fff 90%,transparent);
-  box-shadow:0 0 10px 2px #ff5a4e,0 0 38px 10px rgba(255,90,78,.45);}
-.ep-frame .tag{
-  position:absolute;left:12px;bottom:12px;z-index:4;display:flex;align-items:center;gap:8px;
-  background:rgba(8,9,11,.72);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:7px 12px;
-  font-family:"Space Mono",monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#D6DEE8;
-  transition:opacity .45s var(--ease);
-}
-.ep-frame .tag::before{content:"";width:6px;height:6px;border-radius:99px;background:var(--red)}
-.ep-wrap .about2-lead{margin-top:clamp(14px,2.2vh,24px);max-width:720px;font-size:.98rem;line-height:1.65;color:var(--mut)}
-.ep-wrap .about2-points{margin-top:clamp(14px,2.4vh,26px);width:100%;max-width:1000px;grid-template-columns:repeat(3,1fr);gap:26px;text-align:left}
-.ep-wrap .ap{padding-top:14px}
-.ep-wrap .ap b{font-size:1.02rem}
-.ep-wrap .ap .t{font-size:.86rem;line-height:1.5}
-html:not(.sc-on) .ep-door,html:not(.sc-on) .ep-seam{display:none}
-.sc-on .ep{height:190vh}
-.sc-on .ep-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding-top:64px}
-.sc-on .ep-frame .tag{opacity:0}
-.sc-on .ep.open .ep-frame .tag{opacity:1}
-.ep ~ .cbam2{margin-top:clamp(36px,5vw,56px)}
-@media (max-width:880px){
-  .ep-h{font-size:clamp(1.6rem,7.4vw,2.1rem)}
-  .ep-frame{width:100%}
-  .ep-wrap .about2-lead{font-size:.9rem;line-height:1.55}
-  .ep-wrap .about2-points{grid-template-columns:1fr;gap:0}
-  .ep-wrap .ap{padding:10px 0}
-  .ep-wrap .ap .t{display:none}
-  .sc-on .ep{height:170vh}
-  .sc-on .ep-pin{align-items:flex-start;padding-top:76px}
-}
-
-/* van tekening tot levering: bij levering maakt de plaat plaats voor de vrachtwagen */
-.f2-visual{position:relative;width:100%;aspect-ratio:16/10;display:flex;align-items:center}
-.f2-visual .f2-stage{width:100%}
-.f2-truck{position:absolute;inset:0;margin:0;border-radius:var(--r);overflow:hidden;box-shadow:0 40px 90px -40px rgba(0,0,0,.9),0 0 0 1px var(--line)}
-.f2-truck img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;will-change:transform}
-.f2-truck .tag{
-  position:absolute;left:14px;bottom:14px;z-index:2;display:flex;align-items:center;gap:9px;
-  background:rgba(8,9,11,.82);border:1px solid rgba(255,255,255,.16);border-radius:8px;padding:8px 12px;
-  font-family:"Space Mono",monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:#E6EBF0;
-}
-.f2-truck .tag::before{content:"";width:7px;height:7px;background:var(--red)}
-html:not(.sc-on) .f2-truck{display:none}
-.sc-on .f2-truck{clip-path:inset(0 0 0 100% round 14px)}
-@media (max-width:880px){.f2-visual{order:-1;aspect-ratio:16/10}}
+/* bewerkingen: zonder de losse video; lijst over de volle breedte, drie video's eronder */
+.ops-split.solo{grid-template-columns:1fr}
+@media (min-width:1000px){.ops-split.solo .ops-list{grid-template-columns:repeat(4,1fr)}}
