@@ -787,24 +787,50 @@ video{pointer-events:none}
   .about-grid.solo .about-point:last-child{border-bottom:0}
 }
 
-/* footer: werkplaatsfoto in plaats van de bewerkingenlijst */
-.footer-grid.has-photo{grid-template-columns:1.2fr 1fr 1fr 1.25fr}
-.footer-photo{
-  margin:0;position:relative;border-radius:var(--r);overflow:hidden;
-  border:1px solid var(--line);aspect-ratio:4/3;align-self:start;background:#0E1013;
-}
-.footer-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
-@media (max-width:880px){
-  .footer-grid.has-photo{grid-template-columns:1fr 1fr}
-  .footer-grid.has-photo .footer-photo{grid-column:1 / -1;order:-1;aspect-ratio:16/9}
-  .footer-grid.has-photo .footer-brand{grid-column:1 / -1}
-}
-@media (max-width:560px){
-  .footer-grid.has-photo{grid-template-columns:1fr;gap:30px}
-  .footer-grid.has-photo > div:nth-child(2) ul{columns:2;column-gap:20px}
-  .footer-grid.has-photo > div:nth-child(2) li{break-inside:avoid}
-}
 
 /* bewerkingen: zonder de losse video; lijst over de volle breedte, drie video's eronder */
 .ops-split.solo{grid-template-columns:1fr}
 @media (min-width:1000px){.ops-split.solo .ops-list{grid-template-columns:repeat(4,1fr)}}
+
+/* ==========================================================================
+   RONDE 5 (29-09-2026): werkplaatsfoto als achtergrond van de footer.
+   De hele foto is zichtbaar (fb-pic, rechts op desktop, bovenaan op mobiel)
+   en loopt zacht over in dezelfde foto, vervaagd, over de hele achtergrond (fb-amb).
+   ========================================================================== */
+.footer.has-bg{position:relative;overflow:hidden;background:#07080A}
+.footer-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.footer-bg img{position:absolute;display:block;max-width:none}
+.fb-amb{inset:0;width:100%;height:100%;object-fit:cover;opacity:.5;transform:scale(1.2);filter:blur(30px) brightness(.45) saturate(.85)}
+.fb-pic{top:0;right:0;height:100%;width:auto;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%);mask-image:linear-gradient(90deg,transparent 0%,#000 30%)}
+.footer-bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(0deg,rgba(7,8,10,.92) 0%,rgba(7,8,10,0) 110px),
+    linear-gradient(90deg,rgba(7,8,10,.86) 0%,rgba(7,8,10,.72) 48%,rgba(7,8,10,.14) 70%,rgba(7,8,10,.04) 100%);
+}
+.footer.has-bg .container{position:relative;z-index:1}
+.footer.has-bg li a,.footer.has-bg li span,.footer.has-bg p{text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.footer.has-bg .footer-bottom{border-top-color:rgba(255,255,255,.14);color:#8A95A2}
+.footer-grid.trio{grid-template-columns:1.4fr 1fr 1.2fr}
+@media (min-width:881px){
+  .footer.has-bg .footer-grid.trio{max-width:min(700px,56%);grid-template-columns:1.3fr 1fr 1.15fr;gap:clamp(22px,3vw,40px)}
+}
+@media (max-width:880px){
+  .footer.has-bg{padding-top:0}
+  .footer.has-bg::before{content:"";display:block;aspect-ratio:1400/1344}      /* ruimte voor de hele foto */
+  .fb-pic{left:0;right:0;width:100%;height:auto;
+    -webkit-mask-image:linear-gradient(180deg,#000 70%,transparent 100%);mask-image:linear-gradient(180deg,#000 70%,transparent 100%)}
+  .footer-bg::after{background:linear-gradient(180deg,rgba(7,8,10,.1) 0%,rgba(7,8,10,0) 40%,rgba(7,8,10,.6) 70%,rgba(7,8,10,.9) 100%)}
+  .footer.has-bg .container{margin-top:-8%}
+  .footer-grid.trio{grid-template-columns:1fr 1fr}
+  .footer-grid.trio .footer-brand{grid-column:1 / -1}
+}
+@media (max-width:560px){
+  .footer-grid.trio{grid-template-columns:1fr;gap:30px}
+  .footer-grid.trio > div:nth-child(2) ul{columns:2;column-gap:20px}
+  .footer-grid.trio > div:nth-child(2) li{break-inside:avoid}
+}
+
+/* landing: minder ruimte tussen de secties (was 72–120 px boven en onder) */
+.home .sec{padding:clamp(40px,4.6vw,66px) 0}
