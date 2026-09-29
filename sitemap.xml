@@ -300,4 +300,34 @@
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://intermetal.nl/cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://intermetal.nl/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://intermetal.nl/en/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://intermetal.nl/de/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://intermetal.nl/cookies/"/>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://intermetal.nl/en/cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://intermetal.nl/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://intermetal.nl/en/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://intermetal.nl/de/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://intermetal.nl/cookies/"/>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://intermetal.nl/de/cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://intermetal.nl/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://intermetal.nl/en/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://intermetal.nl/de/cookies/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://intermetal.nl/cookies/"/>
+    <lastmod>2026-09-29</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
 </urlset>

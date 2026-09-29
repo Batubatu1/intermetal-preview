@@ -149,3 +149,103 @@
   window.addEventListener("resize", onScroll);
   frame();
 })();
+
+/* Cookiemelding (29-09-2026): alles accepteren, alleen noodzakelijk, of per categorie kiezen.
+   Keuze in cookie 'im_consent' (12 maanden). Scripts voor statistiek/marketing later toevoegen als
+   <script type="text/plain" data-consent="statistics|marketing" data-src="..."></script>;
+   die worden pas geladen na toestemming. Event: window 'im:consent' (detail = keuze). */
+(function () {
+  "use strict";
+  var KEY = "im_consent", VERSION = 1;
+  var lang = (document.documentElement.lang || "nl").slice(0, 2);
+  var me = document.currentScript && document.currentScript.src;
+  var base = me ? me.replace(/assets\/js\/main\.js.*$/, "") : "/";
+  var policy = base + (lang === "nl" ? "" : lang + "/") + "cookies/index.html";
+  var T = {
+    nl: { title: "Cookies op deze website", text: "Wij gebruiken alleen cookies die nodig zijn om de website goed te laten werken, zoals het onthouden van uw cookiekeuze. Statistiek- en marketingcookies plaatsen wij alleen met uw toestemming: statistieken laten ons zien hoe de website wordt gebruikt, marketingcookies maken advertenties en social media relevanter. U kunt uw keuze altijd wijzigen via “Cookie-instellingen” onderaan elke pagina. Meer informatie leest u in ons",
+          all: "Alles accepteren", none: "Alleen noodzakelijk", prefs: "Instellingen", save: "Keuze opslaan", policy: "Cookiebeleid", open: "Cookie-instellingen",
+          nec: "Noodzakelijk", necD: "Nodig om de website te laten werken en uw cookiekeuze te onthouden. Altijd aan.",
+          stat: "Statistieken", statD: "Anoniem inzicht in hoe de website wordt gebruikt.", mkt: "Marketing", mktD: "Om advertenties en social media beter af te stemmen." },
+    en: { title: "Cookies on this website", text: "We only use cookies that are needed for the website to work properly, such as remembering your cookie choice. We only place statistics and marketing cookies with your consent: statistics show us how the website is used, marketing cookies make advertising and social media more relevant. You can change your choice at any time via “Cookie settings” at the bottom of every page. More information in our",
+          all: "Accept all", none: "Necessary only", prefs: "Settings", save: "Save choice", policy: "Cookie policy", open: "Cookie settings",
+          nec: "Necessary", necD: "Required for the website to work and to remember your cookie choice. Always on.",
+          stat: "Statistics", statD: "Anonymous insight into how the website is used.", mkt: "Marketing", mktD: "To tailor advertising and social media." },
+    de: { title: "Cookies auf dieser Website", text: "Wir verwenden nur Cookies, die für den einwandfreien Betrieb der Website notwendig sind, zum Beispiel um Ihre Cookie-Auswahl zu speichern. Statistik- und Marketing-Cookies setzen wir nur mit Ihrer Einwilligung: Statistiken zeigen uns, wie die Website genutzt wird, Marketing-Cookies machen Werbung und soziale Medien relevanter. Sie können Ihre Auswahl jederzeit über „Cookie-Einstellungen“ unten auf jeder Seite ändern. Mehr dazu in unserer",
+          all: "Alle akzeptieren", none: "Nur notwendige", prefs: "Einstellungen", save: "Auswahl speichern", policy: "Cookie-Richtlinie", open: "Cookie-Einstellungen",
+          nec: "Notwendig", necD: "Erforderlich für den Betrieb der Website und um Ihre Cookie-Auswahl zu speichern. Immer aktiv.",
+          stat: "Statistik", statD: "Anonyme Einblicke, wie die Website genutzt wird.", mkt: "Marketing", mktD: "Um Werbung und soziale Medien besser abzustimmen." }
+  }[lang] || null;
+  if (!T) return;
+
+  function read() {
+    var m = document.cookie.match(/(?:^|; )im_consent=([^;]*)/);
+    if (!m) return null;
+    try { var c = JSON.parse(decodeURIComponent(m[1])); return c && c.v === VERSION ? c : null; } catch (e) { return null; }
+  }
+  function apply(c) {
+    document.querySelectorAll('script[type="text/plain"][data-consent]').forEach(function (s) {
+      if (!c[s.getAttribute("data-consent")] || s.hasAttribute("data-ran")) return;
+      var n = document.createElement("script");
+      if (s.getAttribute("data-src")) n.src = s.getAttribute("data-src"); else n.text = s.text;
+      s.setAttribute("data-ran", ""); s.parentNode.insertBefore(n, s.nextSibling);
+    });
+    try { window.dispatchEvent(new CustomEvent("im:consent", { detail: c })); } catch (e) {}
+  }
+  function save(stat, mkt) {
+    var c = { v: VERSION, statistics: !!stat, marketing: !!mkt, t: new Date().toISOString().slice(0, 10) };
+    document.cookie = KEY + "=" + encodeURIComponent(JSON.stringify(c)) + "; max-age=31536000; path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : "");
+    close(); apply(c);
+  }
+
+  var box;
+  function sw(id, label, desc, on, locked) {
+    return '<label class="cc-cat"><span class="cc-cat-t"><b>' + label + '</b><span>' + desc + '</span></span>' +
+      '<input type="checkbox" id="' + id + '"' + (on ? " checked" : "") + (locked ? " disabled" : "") + '><span class="cc-sw" aria-hidden="true"></span></label>';
+  }
+  function open(showPrefs) {
+    close();
+    var c = read() || {};
+    box = document.createElement("div");
+    box.className = "cc" + (showPrefs ? " cc-prefs-on" : "");
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-live", "polite");
+    box.setAttribute("aria-label", T.title);
+    box.innerHTML =
+      '<div class="cc-in">' +
+        '<div class="cc-copy"><b class="cc-title">' + T.title + '</b>' +
+        '<p class="cc-text">' + T.text + ' <a href="' + policy + '">' + T.policy + '</a>.</p></div>' +
+        '<div class="cc-prefs">' + sw("cc-nec", T.nec, T.necD, true, true) + sw("cc-stat", T.stat, T.statD, c.statistics, false) + sw("cc-mkt", T.mkt, T.mktD, c.marketing, false) + '</div>' +
+        '<div class="cc-btns">' +
+          '<button type="button" class="cc-btn cc-primary" data-a="all">' + T.all + '</button>' +
+          '<button type="button" class="cc-btn" data-a="none">' + T.none + '</button>' +
+          '<button type="button" class="cc-btn cc-save" data-a="save">' + T.save + '</button>' +
+          '<button type="button" class="cc-link" data-a="prefs">' + T.prefs + '</button>' +
+        '</div>' +
+      '</div>';
+    box.addEventListener("click", function (e) {
+      var a = e.target.getAttribute && e.target.getAttribute("data-a");
+      if (a === "all") save(true, true);
+      else if (a === "none") save(false, false);
+      else if (a === "save") save(box.querySelector("#cc-stat").checked, box.querySelector("#cc-mkt").checked);
+      else if (a === "prefs") box.classList.add("cc-prefs-on");
+    });
+    document.body.appendChild(box);
+    requestAnimationFrame(function () { if (box) box.classList.add("cc-show"); });
+  }
+  function close() { if (box && box.parentNode) box.parentNode.removeChild(box); box = null; }
+
+  // link onderaan elke pagina om de keuze later te wijzigen
+  var fb = document.querySelector(".footer-bottom");
+  if (fb) {
+    var span = document.createElement("span");
+    span.className = "cc-foot";
+    span.innerHTML = '<a href="' + policy + '">' + T.policy + '</a> · <button type="button" class="cc-open">' + T.open + '</button>';
+    fb.appendChild(span);
+  }
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest(".cc-open")) { e.preventDefault(); open(true); }
+  });
+
+  var saved = read();
+  if (saved) apply(saved); else open(false);
+})();
